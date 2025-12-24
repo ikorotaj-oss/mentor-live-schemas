@@ -1,6 +1,7 @@
 name: SCHEMAS_DEV_DEPLOYER
 
 on:
+  workflow_dispatch:
 
 env:
   GCP_PROJECT_ID: "mentor-development"
