@@ -25,7 +25,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2     
         with:
             project_id: ${{ env.GCP_PROJECT_ID }}
-            export_default_credentials: true
 
       - name: Deploy Tables and Views
         id: deploy-tables-and-views
@@ -72,14 +71,14 @@ jobs:
               continue
             fi
 
-            echo "Executing SQL query from file $file_name:"
-
             sql_query=$(sed "s/{{ *clientId *}}/$BQ_DATASET/g" $sql_file) # | \
+
+            echo "Executing SQL query from file $file_name:"
             echo "$sql_query"
-            # bq query \
-            #   --use_legacy_sql=false \
-            #   --project_id="$BQ_PROJECT" \
-            #   < "$sql_file"
+
+            echo "$sql_query" | bq query \
+              --use_legacy_sql=false \
+              --project_id="$BQ_PROJECT"
 
             echo "Finished: $file_name"
             echo
