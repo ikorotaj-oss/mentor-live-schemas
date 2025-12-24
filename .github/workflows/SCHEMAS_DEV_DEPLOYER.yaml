@@ -1,5 +1,7 @@
 name: SCHEMAS_DEV_DEPLOYER
 
+on:
+
 env:
   GCP_PROJECT_ID: "mentor-development"
   SERVICE_ACCOUNT_DEPLOYER: ${{ secrets.GOOGLE_KEY_DEV }}
