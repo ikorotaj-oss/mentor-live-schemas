@@ -7,6 +7,22 @@ on:
         description: "Branch to run against"
         required: true
         default: "master"
+      bq_project:
+        type: choice
+        description: "BigQuery project to run against"
+        required: true
+        options:
+          - mentor-development
+        default: "mentor-development"
+      bq_dataset:
+        description: "BigQuery dataset / folder in this repo where DDL queries should be executed from"
+      whitelist_regex:
+        description: "Whitelist regular expression"
+        required: true
+      blacklist_regex:
+        description: "Blacklist regular expression"
+        required: false
+        default: "$^"   # matching nothing by default
 
 env:
   GCP_PROJECT_ID: "mentor-development"
@@ -36,10 +52,10 @@ jobs:
       - name: Deploy Tables and Views
         id: deploy-tables-and-views
         run: |
-          WHITELIST_REGEX="test_view.sql"            # Regex of files to include
-          BLACKLIST_REGEX="${3:-$^}"            # Regex of files to exclude (matches nothing by default)
-          BQ_PROJECT="mentor-development"           # Optional: set via env var
-          BQ_DATASET="testclient"           # Optional: set via env var
+          WHITELIST_REGEX="${{ inputs.whitelist_regex }}"   # Regex of files to include
+          BLACKLIST_REGEX="${{ inputs.blacklist_regex }}"   # Regex of files to exclude (matches nothing by default)
+          BQ_PROJECT="${{ inputs.bq_project }}"             # BigQuery project to run against
+          BQ_DATASET="${{ inputs.bq_dataset }}"             # BigQuery dataset / folder in this repo
           SQL_DIR=$BQ_DATASET
 
           # -----------------------------
